@@ -61,7 +61,6 @@ def video_id_details(youtube,channel_playlistId):
     try:
         while True:
             request1 = youtube.playlistItems().list(
-               # part='snippet',
                 part='contentDetails',
                 playlistId=channel_playlistId,
                 maxResults=50,

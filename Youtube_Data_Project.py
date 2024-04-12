@@ -27,7 +27,7 @@ def channel_details(youtube,chan_detail):
     response = request.execute()
     # pprint(response)
 
-    channel_id = response['items'][0]['id']
+    channel_id = response['items'][0]['snippet']['channelId']
     request1 = youtube.channels().list(
         part="snippet,contentDetails,statistics",
         id=channel_id
@@ -245,55 +245,55 @@ question=st.selectbox("select your question",(q1,q2,q3,q4,q5,q6,q7,q8,q9,q10))
 
 if question == q1:
     sql_query = "SELECT vd.v_title,ch.channel_name FROM video_details_pj vd INNER JOIN channel_details ch ON vd.channel_id = ch.channel_id;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 
 elif question == q2:
     sql_query = "SELECT ch.channel_name, COUNT(vd.v_id) AS video_count FROM channel_details ch INNER JOIN video_details_pj vd ON ch.channel_id = vd.channel_id GROUP BY ch.channel_name ORDER BY video_count DESC LIMIT 1;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 elif question == q3:
     sql_query = "SELECT ch.channel_name,vd.v_title, vd.v_viewCount FROM video_details_pj vd JOIN channel_details ch ON vd.channel_id = ch.channel_id ORDER BY vd.viewCount DESC LIMIT 10;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 
 elif question == q4:
     sql_query = "SELECT vd.v_title, COUNT(cmt.comment_id) AS comment_count FROM video_details_pj vd LEFT JOIN comment_details_pj cmt ON vd.v_id = cmt.v_id GROUP BY vd.v_title;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 
 elif question == q5:
     sql_query = "SELECT vd.v_title, ch.channel_name, vd.v_likeCount as Likes_count FROM video_details_pj vd INNER JOIN channel_details ch ON vd.channel_id = ch.channel_id ORDER BY vd.v_likeCount DESC LIMIT 10;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 
 elif question == q6:
     sql_query = "SELECT vd.v_title, SUM(vd.v_likeCount) AS Total_likes FROM video_details_pj vd GROUP BY vd.v_title;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 
 elif question == q7:
     sql_query = "SELECT ch.channel_name, SUM(vd.viewCount) AS total_views FROM channel_details ch INNER JOIN video_details_pj vd ON ch.channel_id = vd.channel_id GROUP BY ch.channel_name;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 
 elif question == q8:
     sql_query = "SELECT DISTINCT ch.channel_name FROM channel_details ch INNER JOIN video_details_pj vd ON ch.channel_id = vd.channel_id WHERE YEAR(vd.v_publishedAt) = 2022;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 elif question == q9:
     st.write("Duration not defined")
 elif question == q10:
     sql_query = "SELECT vd.v_title, ch.channel_name, COUNT(cmt.comment_id) AS comment_count FROM video_details_pj vd INNER JOIN channel_details ch ON vd.channel_id = ch.channel_id LEFT JOIN comment_details_pj cmt ON vd.v_id = cmt.v_id GROUP BY vd.v_title, ch.channel_name ORDER BY comment_count DESC LIMIT 1;"
-    data, columns = fetch_data(sql_query)
+    data, columns = sql_query.fetchall()
     df = pd.DataFrame(data, columns=columns)
     st.dataframe(df)
 

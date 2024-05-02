@@ -12,7 +12,7 @@ import streamlit as st
 # Get Channel Details
 def channel_details(youtube,chan_detail):
 
-    youtube = build(api_service_name, api_version, developerKey=api_key)
+    
     request = youtube.search().list(
         part='snippet',
         maxResults=15,
@@ -134,7 +134,7 @@ def comment_details(youtube,video_ids):
 
 
 # Youtube API Connection
-api_key="AIzaSyCDG1z9Hc-XvpZIBB2QvaRzvFG7tYRGAyU"
+api_key="AIzaSyAfT9POq5OU1kM1AdhRDkwYUMa5AK3sNq0"
 api_service_name="youtube"
 api_version="v3"
 youtube=build(api_service_name,api_version,developerKey=api_key)
@@ -222,8 +222,7 @@ st.subheader(':red[YouTube Data Insert into SQL]')
 
 #Insert the youtube data into SQL Database
 if st.button('Insert Data into SQL Database'):
-    query = '''select channel_name, channel_videocount from channel_details
-            order by channel_videocount desc'''
+    
     mycursor.execute('select channel_name from youtube_collection.channel_details where channel_name=%s', [Enter_channel])
     mydb.commit()
     result = mycursor.fetchall()
@@ -259,7 +258,7 @@ sql_query= st.selectbox('Choose the following Queries ',(q1,q2,q3,q4,q5,q6,q7,q8
 
 if sql_query == q1:
 
-    query1='''select v_title as videoName,channel_name as channelname from video_pjs'''
+    query1='''select v_title as videoName,channel_name as channelname from video_details_pj'''
     mycursor.execute(query1)
     mydb.commit()
     t1 = mycursor.fetchall()
